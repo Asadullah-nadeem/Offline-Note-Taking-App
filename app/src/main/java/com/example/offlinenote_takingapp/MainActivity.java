@@ -1,5 +1,6 @@
 package com.example.offlinenote_takingapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 
@@ -8,8 +9,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import android.content.Intent;
-
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,38 +18,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-//    private NotesDatabaseHelper dbHelper;
-//    private RecyclerView recyclerViewNotes;
-//    private FloatingActionButton fabAddNote;
-private NotesDatabaseHelper dbHelper;
+    private NotesDatabaseHelper dbHelper;
     private RecyclerView recyclerViewNotes;
     private FloatingActionButton fabAddNote;
     private NoteAdapter noteAdapter;
     private List<String> notesList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fabAddNote = findViewById(R.id.fabAddNote);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Set up padding for system bars (status bar and navigation bar)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        loadNotes();
+
+        // Initialize views
         dbHelper = new NotesDatabaseHelper(this);
         recyclerViewNotes = findViewById(R.id.recyclerViewNotes);
         fabAddNote = findViewById(R.id.fabAddNote);
 
+        // Set up RecyclerView with LinearLayoutManager
         recyclerViewNotes.setLayoutManager(new LinearLayoutManager(this));
-        // Adapter setup here (omitted for brevity)
 
+        // Load notes from the database
+        loadNotes();
+
+        // Floating action button click listener to add a new note
         fabAddNote.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, EditNoteActivity.class);
             startActivity(intent);
         });
     }
+
     // Method to load notes from the database
     private void loadNotes() {
         notesList = new ArrayList<>();

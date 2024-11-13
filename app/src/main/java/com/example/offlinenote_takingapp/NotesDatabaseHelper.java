@@ -38,10 +38,6 @@ public class NotesDatabaseHelper extends SQLiteOpenHelper {
         return result != -1;
     }
 
-//    public Cursor getAllNotes() {
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        return db.query(TABLE_NAME, null, null, null, null, null, COLUMN_ID + " DESC");
-//    }
 public Cursor getAllNotes() {
     SQLiteDatabase db = this.getReadableDatabase();
     return db.query(TABLE_NAME, null, null, null, null, null, COLUMN_ID + " DESC");
